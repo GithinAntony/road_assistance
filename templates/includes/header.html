@@ -1,0 +1,95 @@
+<header class="header_section">
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg custom_nav-container ">
+
+      <a class="navbar-brand" href="">
+        <span>Road Assistance</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class=""> </span>
+      </button>
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+<ul class="navbar-nav ml-auto">
+{% if 'is_logged_in' in request.session and request.session.usertype == 'admin' %}
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %} active {% endif %}" href="{% url 'site_admin:dashboard' %}">Dashboard <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'add_location' %} active {% endif %}" href="{% url 'site_admin:add_location' %}">Add Location</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'add_category' %} active {% endif %}" href="{% url 'site_admin:add_category' %}">Add Category</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'list_public_user' %} active {% endif %}" href="{% url 'site_admin:list_public_user' %}">List Users</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'list_mechanic_user' %} active {% endif %}" href="{% url 'site_admin:list_mechanic_user' %}">List Mechanic</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'site_admin:logout' %}">Sign Out ({{ request.session.usertype }})</a>
+</li>
+{% elif 'is_logged_in' in request.session and request.session.usertype == 'user' %}
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %} active {% endif %}" href="{% url 'public:dashboard' %}">Dashboard <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'search_mechanic' %} active {% endif %}" href="{% url 'public:search_mechanic' %}">Search Mechanic</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'public:logout' %}">Sign Out ({{ request.session.usertype }})</a>
+</li>
+{% elif 'is_logged_in' in request.session and request.session.usertype == 'mechanic_user' %}
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %} active {% endif %}" href="{% url 'mechanic:dashboard' %}">Dashboard <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item">
+  <a class="nav-link {% if request.resolver_match.url_name == 'complaints_list' %} active {% endif %}" href="{% url 'mechanic:complaints_list' %}">Complaints</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'mechanic:logout' %}">Sign Out ({{ request.session.usertype }})</a>
+</li>
+{% else %}
+<li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}" href="{% url 'index:home' %}">Home <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'about' %} active {% endif %}" href="{% url 'index:about' %}"> About</a>
+</li>
+<li class="nav-item ">
+<a class="nav-link {% if request.resolver_match.url_name == 'service' %} active {% endif %}" href="{% url 'index:service' %}">Services</a>
+</li>
+<li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'why' %} active {% endif %}" href="{% url 'index:why' %}">Why Us</a>
+</li>
+<li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'signin' %} active {% endif %}" href="{% url 'mechanic:signin' %}">Mechanic</a>
+</li>
+<li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'signin' %} active {% endif %}" href="{% url 'public:signin' %}">Public</a>
+</li>
+<li class="nav-item">
+<a class="nav-link {% if request.resolver_match.url_name == 'contact_us' %} active {% endif %}" href="{% url 'index:contact_us' %}">Contact Us</a>
+</li>
+{% endif %}
+</ul>
+        <div class="quote_btn-container">
+          <form class="form-inline">
+            <button class="btn   nav_search-btn" type="submit">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+          </form>
+          <a href="">
+            <i class="fa fa-phone" aria-hidden="true"></i>
+            <span>
+              Call : +01 9999999999
+            </span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+  </div>
+</header>

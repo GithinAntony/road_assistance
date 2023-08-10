@@ -1,0 +1,227 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block custom-style %}
+<style>
+  #chat2 .form-control {
+border-color: transparent;
+}
+
+#chat2 .form-control:focus {
+border-color: transparent;
+box-shadow: inset 0px 0px 0px 1px transparent;
+}
+
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
+</style>
+{% endblock %}
+{% block content %}
+<!-- header section strats -->
+{% include 'includes/header.html'  %}
+<!-- end header section -->
+  <!-- service section -->
+  <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          <u>View Complaints</u>
+        </h2>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-lg-6">
+          <dl>
+          <dt>Full Name:</dt>
+          <dd>{{ userdata.firstname }} {{ userdata.firstname }}</dd>
+          <dt>Email:</dt>
+          <dd>{{ userdata.email }}</dd>
+          <dt>Mobile Number:</dt>
+          <dd>{{ userdata.mobilenumber }}</dd>
+          <dt>Address:</dt>
+          <dd>{{ userdata.address }}</dd>
+          <dt>Date Added:</dt>
+          <dd>{{ userdata.date_added }}</dd>
+          </dl>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form_container">
+            <div class="heading_container ">
+              <h6>
+              <u>  Request Assistance </u>
+              </h6>
+            </div>
+
+
+            <dl>
+
+            <form action="" method="POST" id="form_1">
+
+              {% csrf_token %}
+              {% if messages %}
+              <ul class="messages text-center">
+              {% for message in messages %}
+               <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+               {% endfor %}
+               </ul>
+               {% endif %}
+
+               <dt>Complaints:</dt>
+               <dd>{{ complaints.complaints_text }}</dd>
+               <dt>Breakdown location :</dt>
+               <dd>{{ complaints.location_text }}</dd>
+               <dt>Status :</dt>
+               <dd>{{ complaints.status }}</dd>
+
+
+              <dt>Mechanic Statement :</dt>
+              <dd>
+                <div>
+                  <input type="text" class="message-box" id="complaint" name="reply" value="{{ complaints.reply }}" placeholder="Enter your reply here" />
+                </div>
+              </dd>
+
+
+
+<dt>Status :</dt>
+  <dd>
+              <div>
+<select id="change_status" name="change_status">
+<option value="">Select Status</option>
+<option value="open" {% if complaints.status == 'open' %} selected {% endif %} >Open</option>
+<option value="closed" {% if complaints.status == 'closed' %} selected {% endif %} >Closed</option>
+</select>
+              </div>
+</dd>
+
+            <div class="btn_box ">
+                <button type="submit">
+                  SUBMIT
+                </button>
+              </div>
+            </form>
+
+  </dl>
+
+          </div>
+        </div>
+
+      </div>
+
+          <div class="row">
+
+            <div class="col-lg-12">
+
+        <form action="{% url 'public:add_messages' id=complaint_id  id2=user_id %}" method="POST" id="form_2">
+              {% csrf_token %}
+            <h4 class="mb-5">Messages</h4>
+              <section style="padding-top: 25px; padding-bottom: 25px;">
+                <div class="container">
+
+                  <div class="row d-flex justify-content-center">
+                    <div class="col-md-12">
+
+                      <div class="card" id="chat2">
+                        <div class="card-header d-flex justify-content-between align-items-center p-3">
+                          <h5 class="mb-0">Chat</h5>
+                        </div>
+                        <div class="card-body" data-mdb-perfect-scrollbar="true">
+
+                          <div class="divider d-flex align-items-center mb-4">
+                            <p class="text-center mx-3 mb-0" style="color: #a2aab7;">
+                              {% if messages %}
+                              <ul class="messages text-center">
+                              {% for message in messages %}
+                               <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                               {% endfor %}
+                               </ul>
+                               {% endif %}
+                            </p>
+                          </div>
+
+            {% if user_messages.count > 0 %}
+            {% for row in user_messages %}
+            {% if row.status == 'mechanic_user' %}
+            <div class="d-flex flex-row justify-content-start mb-4">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+                  alt="avatar 1" style="width: 45px; height: 100%;">
+                <div>
+                  <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">{{ row.messages_text }}</p>
+                  <p class="small ms-3 mb-3 rounded-3 text-muted">{{ complaints.selected_department.department_name }} {{ row.date_added }}</p>
+                </div>
+              </div>
+            {% endif %}
+            {% if row.status == 'user' %}
+            <div class="d-flex flex-row justify-content-end">
+              <div>
+                <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">{{ row.messages_text }}</p>
+                <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">{{ complaints.public_user.firstname }} {{ complaints.public_user.lastname }}, {{ row.date_added }}</p>
+              </div>
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
+                alt="avatar 1" style="width: 45px; height: 100%;">
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <b>No messages added yet</b>
+            {% endif %}
+                        </div>
+                        <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+                          <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+                            alt="avatar 3" style="width: 40px; height: 100%;">
+                          <input type="text" class="form-control form-control-lg" id="message" name="message" placeholder="Type message">
+                          <input type="submit" class="btn btn-success btn-md" value="Send" />
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </section>
+
+          </form>
+
+        </div>
+
+          </div>
+
+    </div>
+  </section>
+  <!-- end service section -->
+  <!-- info section -->
+  <!-- end info section -->
+  <!-- footer section -->
+  {% include 'includes/footer.html'  %}
+  <!-- footer section -->
+  {% endblock %}
+  {% block custom-js %}
+  <script src="{% static 'lib/validate/jquery.validate.min.js' %}"></script>
+  <script src="{% static 'lib/validate/additional-methods.min.js' %}"></script>
+  <script>
+  $(document).ready(function() {
+      $( "#form_1" ).validate({
+       ignore: [],
+        rules: {
+              change_status: {
+                required: true
+              },
+              reply: {
+                required: true,
+                minlength: 10,
+                maxlength: 1500,
+              },
+        }
+      });
+  } );
+  </script>
+  {% endblock %}

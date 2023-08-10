@@ -1,0 +1,128 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block custom-style %}
+<link href="{% static 'lib/datatables/datatables.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<!-- header section strats -->
+{% include 'includes/header.html'  %}
+<!-- end header section -->
+  <!-- service section -->
+  <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Search Mechanic
+        </h2>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="box">
+
+<div class="row">
+<div class="col-lg-12">
+{% if messages %}
+<ul class="messages text-center">
+{% for message in messages %}
+<li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+</div>
+</div>
+
+<div class="row">
+<div class="col-lg-12" style="background-color: white; padding: 50px">
+
+  <form action="" method="post" name="form_1" id="form_1" enctype="multipart/form-data">
+  {% csrf_token %}
+
+<div>
+  <label style="font-size: 18px; color: #ff6f3d !important"> Please select a location near you...</label>
+    <select id="location_list" name="location_list" style="height: 45px; width: 200px">
+               <option value="">Select Location</option>
+               {% if loaction_list.count > 0 %}
+               {% for row in loaction_list %}
+               <option value="{{ row.unique_id }}">{{ row.location }}</option>
+               {% endfor %}
+               {% endif %}
+  </select>
+  <button type="submit" class="btn btn-lg btn-success" >Submit</button>
+</div>
+  <hr />
+</form>
+
+
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12" style="background-color: white; min-height: 400px; padding: 20px;">
+
+  {% if datalist.count > 0 %}
+  <table id="example" class="stripe">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Img</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Mobile Number</th>
+                <th>Date Added</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for row in datalist %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><img src="{{ row.profile_image }}" width="50" height="50" /></td>
+                <td>{{ row.firstname }} {{ row.lastname }}</td>
+                <td>{{ row.email }}</td>
+                <td>{{ row.mobilenumber }}</td>
+                <td>{{ row.date_added }}</td>
+                <td><a href="{% url 'public:search_mechanic_view' id=row.unique_id %}" class="btn btn-sm btn-info">View & Request</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+              <th>#</th>
+              <th>Img</th>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th>Date Added</th>
+              <th>Actions</th>
+            </tr>
+        </tfoot>
+    </table>
+  {% else %}
+  <b>No mechanic listed.</b>
+  {% endif %}
+</div>
+</div>
+
+
+</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end service section -->
+  <!-- info section -->
+  <!-- end info section -->
+  <!-- footer section -->
+  {% include 'includes/footer.html'  %}
+  <!-- footer section -->
+  {% endblock %}
+  {% block custom-js %}
+  <script type="text/javascript" src="{% static 'lib/datatables/datatables.js' %}"></script>
+  <script>
+  $(document).ready(function() {
+      $('#example').DataTable();
+  } );
+  </script>
+  {% endblock %}
